@@ -1,9 +1,13 @@
 <div class="board">
   @for (square of gameService.board; track $index; let i = $index) {
     <div
+      (click)="onClickSquare(square, i)"
+      (keydown.enter)="onClickSquare(square, i)"
+      (keydown.space)="onClickSquare(square, i)"
       class="square"
       [class.light]="isLightSquare(i)"
       [class.dark]="!isLightSquare(i)"
+      [class.highlighted]="isHighlighted(i)"
     >
     @if (square !== 0) {
       <img [src]="getPieceImage(square)" alt="piece" />

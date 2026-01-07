@@ -1,3 +1,5 @@
+export const EMPTY_MOVE = 255;
+
 const KNIGHT_DELTAS = [
     [-2,-1], [-2,1], [-1,-2], [-1,2],
     [1,-2], [1,2], [2,-1], [2,1]
@@ -19,7 +21,13 @@ for (let sq = 0; sq < 64; sq ++) {
     for (let i = 0; i < moves.length; i++) arr[i] = moves[i];
 
     //The rest of the moves are invalid
-    for (let i = moves.length; i < arr.length; i++) arr[i] = 255;
+    for (let i = moves.length; i < arr.length; i++) arr[i] = EMPTY_MOVE;
 }
 
-export { knightMoves };
+const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
+const queenMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
+const rookMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
+const pawnMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
+const bishopMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
+
+export { knightMoves, queenMoves, rookMoves, pawnMoves, bishopMoves, kingMoves };

@@ -38,6 +38,10 @@ export class GameService {
     return board;
   }
 
+  static getPieceType(square: number): Piece {
+    return square & 0b111;
+  }
+
   resetToStartingPosition(): void {
     this.board = GameService.createStartingPosition();
   }
