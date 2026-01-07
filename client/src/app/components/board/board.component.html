@@ -1,0 +1,13 @@
+<div class="board">
+  @for (square of gameService.board; track $index; let i = $index) {
+    <div
+      class="square"
+      [class.light]="isLightSquare(i)"
+      [class.dark]="!isLightSquare(i)"
+    >
+    @if (square !== 0) {
+      <img [src]="getPieceImage(square)" alt="piece" />
+    }
+    </div>
+  }
+</div>

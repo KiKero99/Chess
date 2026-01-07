@@ -1,0 +1,50 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+
+  width: min(90vmin, 90%);
+  height: min(90vmin, 90%);
+
+  aspect-ratio: 1 / 1;
+
+  border: 2px solid #333;
+  overflow: hidden;
+}
+
+.square.light {
+  background-color: #E8EDF9;
+}
+
+.square.dark {
+  background-color: #B7C0D8;
+}
+
+.square {
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  min-width: 0;
+  min-height: 0;
+}
+
+.square img {
+  position: absolute;
+  inset: 0;
+  top: 50%;
+  left: 50%;
+
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+
+  transform: translate(-50%, -50%);
+
+  max-width: 100%;
+  max-height: 100%;
+}
