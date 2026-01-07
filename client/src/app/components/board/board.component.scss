@@ -31,6 +31,10 @@
   min-height: 0;
 }
 
+.square:hover {
+  opacity: 90%;
+}
+
 .square img {
   position: absolute;
   inset: 0;
