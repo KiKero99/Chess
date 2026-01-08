@@ -25,12 +25,13 @@ export class AvailableMovesManagagerService {
     if (this.selectedPiece === Piece.Empty) return new Uint8Array([EMPTY_MOVE]);
 
     if (this.selectedPiece === Piece.Pawn) {
-    const color = GameService.getPieceColor(
-      this.gameService.board[this.selectedPos]
-    );
+      const color = GameService.getPieceColor(
+        this.gameService.board[this.selectedPos]
+      );
 
-    return this.pawnLookUpTables[color][this.selectedPos];
-  }
+      return this.pawnLookUpTables[color][this.selectedPos];
+    }
+    
     return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
   }
 
