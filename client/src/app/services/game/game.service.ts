@@ -60,7 +60,7 @@ export class GameService {
       return this.canPawnMove(from, to, piece, target);
     }
 
-    return this.board[target] === Piece.Empty || !GameService.areSameColor(piece, target);
+    return target === Piece.Empty || !GameService.areSameColor(piece, target);
   }
 
   canPawnMove(from: number, to: number, piece: Piece, target: Piece) {
