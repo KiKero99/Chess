@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Piece } from '@common/piece.enum';
-import { kingMoves, knightMoves, queenMoves, rookMoves, pawnMoves, bishopMoves, EMPTY_MOVE } from '@common/lookup-tables.const';
+import { kingMoves, knightMoves, queenMoves, rookMoves, pawnMoves, bishopMoves, pawnCaptures,EMPTY_MOVE } from '@common/lookup-tables.const';
 import { GameService } from '@app/services/game/game.service';
 
 @Injectable({
@@ -12,6 +12,7 @@ export class AvailableMovesManagagerService {
 
   private readonly lookUpTables: Map<Piece, Uint8Array[]> = new  Map<Piece, Uint8Array[]>();
   private readonly pawnLookUpTables: Uint8Array[][] = pawnMoves;
+  private readonly pawnCapturesTables: Uint8Array[][] = pawnCaptures;
 
   constructor (private readonly gameService: GameService) {
     this.lookUpTables.set(Piece.King, kingMoves);
@@ -29,9 +30,12 @@ export class AvailableMovesManagagerService {
         this.gameService.board[this.selectedPos]
       );
 
-      return this.pawnLookUpTables[color][this.selectedPos];
+      const moves = this.pawnLookUpTables[color][this.selectedPos];
+      const captures = pawnCaptures[color][this.selectedPos];
+
+      return new Uint8Array([...moves, ...captures]);
     }
-    
+
     return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
   }
 
