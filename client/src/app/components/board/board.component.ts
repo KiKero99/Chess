@@ -20,7 +20,7 @@ export class BoardComponent {
   }
 
   isHighlighted(index: number) {
-    return this.availableMovesManager.availableMoves.includes(index) && this.gameService.board[index] === 0;
+    return this.availableMovesManager.availableMoves.includes(index) && this.gameService.canMove(this.availableMovesManager.actualPos, index);
   }
 
   getPieceImage(square: number): string {
@@ -28,6 +28,11 @@ export class BoardComponent {
   }
 
   onClickSquare(square: number, index: number){
+    if (this.availableMovesManager.isAPieceSelected && this.isHighlighted(index)) {
+      this.gameService.movePiece(this.availableMovesManager.actualPos, index);
+      this.availableMovesManager.onClick(this.gameService.board[index] as Piece, index);
+      return
+    }
     this.availableMovesManager.onClick(square as Piece, index);
   }
 }

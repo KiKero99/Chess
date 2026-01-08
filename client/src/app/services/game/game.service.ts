@@ -42,11 +42,24 @@ export class GameService {
     return square & 0b111;
   }
 
+  static areSameColor(piece1: Piece, piece2: Piece): boolean {
+    return ((piece1 ^ piece2) & Piece.Black) === 0;
+  }
+
+  canMove(pos: Piece, target: Piece): boolean {
+    return this.board[target] === Piece.Empty || !GameService.areSameColor(this.board[pos], this.board[target]);
+  }
+
   resetToStartingPosition(): void {
     this.board = GameService.createStartingPosition();
   }
 
   resetToEmpty(): void {
     this.board = GameService.createEmptyBoard();
+  }
+
+  movePiece(position: number, target: number) {
+    this.board[target] = this.board[position];
+    this.board[position] = Piece.Empty;
   }
 }

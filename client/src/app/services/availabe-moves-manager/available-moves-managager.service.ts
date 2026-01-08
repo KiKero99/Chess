@@ -26,6 +26,14 @@ export class AvailableMovesManagagerService {
     return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
   }
 
+  get isAPieceSelected(): boolean {
+    return this.selectedPiece !== Piece.Empty;
+  }
+
+  get actualPos() {
+    return this.selectedPos;
+  }
+
   onClick(piece: Piece, pos: number) {
     this.selectedPiece = GameService.getPieceType(piece);
     this.selectedPos = pos;
