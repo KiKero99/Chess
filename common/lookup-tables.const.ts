@@ -1,4 +1,6 @@
 export const EMPTY_MOVE = 255;
+export const WHITE = 0;
+export const BLACK = 1;
 
 const KNIGHT_DELTAS = [
     [-2,-1], [-2,1], [-1,-2], [-1,2],
@@ -27,7 +29,74 @@ for (let sq = 0; sq < 64; sq ++) {
 const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 const queenMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 const rookMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
-const pawnMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 const bishopMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 
-export { knightMoves, queenMoves, rookMoves, pawnMoves, bishopMoves, kingMoves };
+//We have 2 cause depending on light square or dark pawn moves up or down
+const pawnMoves: Uint8Array[][] = [
+  Array.from({ length: 64 }, () => new Uint8Array(2)),
+  Array.from({ length: 64 }, () => new Uint8Array(2)),
+];
+
+for (let sq = 0; sq < 64; sq++) {
+  const row = Math.floor(sq / 8);
+
+  //White
+  {
+    const arr = pawnMoves[WHITE][sq];
+    let i = 0;
+
+    if (row < 7) {
+      arr[i++] = sq + 8;
+      if (row === 1) arr[i++] = sq + 16;
+    }
+
+    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+  }
+
+  //Black
+  {
+    const arr = pawnMoves[BLACK][sq];
+    let i = 0;
+
+    if (row > 0) {
+      arr[i++] = sq - 8;
+      if (row === 6) arr[i++] = sq - 16;
+    }
+
+    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+  }
+}
+
+const pawnCaptures: Uint8Array[][] = [
+  Array.from({ length: 64 }, () => new Uint8Array(2)),
+  Array.from({ length: 64 }, () => new Uint8Array(2)),
+];
+
+for (let sq = 0; sq < 64; sq++) {
+  const row = Math.floor(sq / 8);
+  const col = sq % 8;
+
+  //White
+  {
+    const arr = pawnCaptures[WHITE][sq];
+    let i = 0;
+
+    if (row < 7 && col > 0) arr[i++] = sq + 7;
+    if (row < 7 && col < 7) arr[i++] = sq + 9;
+
+    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+  }
+
+  //Black
+  {
+    const arr = pawnCaptures[BLACK][sq];
+    let i = 0;
+
+    if (row > 0 && col > 0) arr[i++] = sq - 9;
+    if (row > 0 && col < 7) arr[i++] = sq - 7;
+
+    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+  }
+}
+
+export { knightMoves, queenMoves, rookMoves, pawnMoves, pawnCaptures, bishopMoves, kingMoves };

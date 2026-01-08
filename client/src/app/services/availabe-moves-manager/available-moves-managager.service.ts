@@ -11,18 +11,26 @@ export class AvailableMovesManagagerService {
   private selectedPos: number = 0;
 
   private readonly lookUpTables: Map<Piece, Uint8Array[]> = new  Map<Piece, Uint8Array[]>();
+  private readonly pawnLookUpTables: Uint8Array[][] = pawnMoves;
 
-  constructor () {
+  constructor (private readonly gameService: GameService) {
     this.lookUpTables.set(Piece.King, kingMoves);
     this.lookUpTables.set(Piece.Knight, knightMoves);
     this.lookUpTables.set(Piece.Queen, queenMoves);
     this.lookUpTables.set(Piece.Rook, rookMoves);
-    this.lookUpTables.set(Piece.Pawn, pawnMoves);
     this.lookUpTables.set(Piece.Bishop, bishopMoves);
   }
 
   get availableMoves(): Uint8Array {
     if (this.selectedPiece === Piece.Empty) return new Uint8Array([EMPTY_MOVE]);
+
+    if (this.selectedPiece === Piece.Pawn) {
+    const color = GameService.getPieceColor(
+      this.gameService.board[this.selectedPos]
+    );
+
+    return this.pawnLookUpTables[color][this.selectedPos];
+  }
     return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
   }
 
