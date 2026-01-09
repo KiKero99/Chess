@@ -30,7 +30,6 @@ for (let sq = 0; sq < 64; sq ++) {
 }
 
 const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
-const queenMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 
 //ROOKS
 const ROOK_DELTAS = [
@@ -169,5 +168,17 @@ for (let sq = 0; sq < 64; sq++) {
     while (i < arr.length) arr[i++] = EMPTY_MOVE;
   }
 }
+
+const queenMoves: Uint8Array[] = Array.from(
+  { length: 64 },
+  (_, sq) => {
+    const combined = [
+      ...bishopMoves[sq],
+      ...rookMoves[sq],
+    ];
+
+    return new Uint8Array(combined);
+  }
+);
 
 export { knightMoves, queenMoves, rookMoves, pawnMoves, pawnCaptures, bishopMoves, kingMoves };
