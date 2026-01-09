@@ -36,7 +36,9 @@ export class AvailableMovesManagagerService {
       return new Uint8Array([...moves, ...captures]);
     }
 
-    return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
+    if (this.selectedPiece === Piece.Knight) return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
+
+    return this.getSlidingOrJumpingMoves();
   }
 
   get isAPieceSelected(): boolean {
@@ -50,5 +52,38 @@ export class AvailableMovesManagagerService {
   onClick(piece: Piece, pos: number) {
     this.selectedPiece = GameService.getPieceType(piece);
     this.selectedPos = pos;
+  }
+
+  private getSlidingOrJumpingMoves(): Uint8Array {
+    const from = this.selectedPos;
+    const piece = this.gameService.board[from];
+    const table = this.lookUpTables.get(this.selectedPiece)![from];
+
+    const valid: number[] = [];
+    
+    let hasBeenBlocked = false;
+    for (const to of table) {
+      if (to === EMPTY_MOVE) {
+        hasBeenBlocked = false;
+        continue;
+      }
+
+      if (hasBeenBlocked) continue;
+
+      const target = this.gameService.board[to];
+
+      if (target === Piece.Empty) {
+        valid.push(to);
+        continue;
+      }
+
+      if (!GameService.areSameColor(piece, target)) {
+        valid.push(to);
+      }
+
+      hasBeenBlocked = true;
+    }
+
+    return valid.length ? new Uint8Array(valid) : new Uint8Array([EMPTY_MOVE]);
   }
 }

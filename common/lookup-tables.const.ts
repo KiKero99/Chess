@@ -29,7 +29,40 @@ for (let sq = 0; sq < 64; sq ++) {
 const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 const queenMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 const rookMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
-const bishopMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
+
+const BISHOP_DELTAS = [
+  [ 1,  1],
+  [ 1, -1],
+  [-1,  1],
+  [-1, -1],
+];
+
+const bishopMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(18));
+
+for (let sq = 0; sq < 64; sq++) {
+  const row = Math.floor(sq / 8);
+  const col = sq % 8;
+
+  const arr = bishopMoves[sq];
+  let index = 0;
+
+  for (const [dr, dc] of BISHOP_DELTAS) {
+    let r = row + dr;
+    let c = col + dc;
+
+    while (r >= 0 && r < 8 && c >= 0 && c < 8) {
+      arr[index++] = r * 8 + c;
+      r += dr;
+      c += dc;
+    }
+    arr[index++] = EMPTY_MOVE;
+  }
+
+  //The rest of the moves are invalid
+  while (index < arr.length) {
+    arr[index++] = EMPTY_MOVE;
+  }
+}
 
 //We have 2 cause depending on light square or dark pawn moves up or down
 const pawnMoves: Uint8Array[][] = [
