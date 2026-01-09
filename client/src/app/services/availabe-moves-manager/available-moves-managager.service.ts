@@ -36,7 +36,7 @@ export class AvailableMovesManagagerService {
       return new Uint8Array([...moves, ...captures]);
     }
 
-    if (this.selectedPiece === Piece.Knight) return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
+    if (this.selectedPiece === Piece.Knight || this.selectedPiece === Piece.King) return this.lookUpTables.get(this.selectedPiece)![this.selectedPos];
 
     return this.getSlidingOrJumpingMoves();
   }

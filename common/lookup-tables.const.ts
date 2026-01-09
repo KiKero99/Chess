@@ -29,7 +29,36 @@ for (let sq = 0; sq < 64; sq ++) {
     for (let i = moves.length; i < arr.length; i++) arr[i] = EMPTY_MOVE;
 }
 
-const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
+//KING
+const KING_DELTAS = [
+  [-1, -1], [-1,  0], [-1,  1],
+  [ 0, -1],           [ 0,  1],
+  [ 1, -1], [ 1,  0], [ 1,  1],
+];
+
+const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(8));
+
+for (let sq = 0; sq < 64; sq++) {
+  const row = Math.floor(sq / 8);
+  const col = sq % 8;
+
+  const arr = kingMoves[sq];
+  let index = 0;
+
+  for (const [dr, dc] of KING_DELTAS) {
+    const r = row + dr;
+    const c = col + dc;
+
+    if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+      arr[index++] = r * 8 + c;
+    }
+  }
+
+  //The rest of the moves are invalid
+  while (index < arr.length) {
+    arr[index++] = EMPTY_MOVE;
+  }
+}
 
 //ROOKS
 const ROOK_DELTAS = [
