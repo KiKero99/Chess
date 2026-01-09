@@ -3,7 +3,7 @@ import { Room } from '@common/room.interface';
 import { Player } from '@common/player.interface';
 
 @Injectable()
-export class RoomManagerServiceService {
+export class RoomManagerService {
     private readonly rooms: Map<string, Room> = new Map<string, Room>();
 
     getRoom(id: string): Room | undefined{

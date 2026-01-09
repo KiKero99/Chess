@@ -3,13 +3,13 @@ import { Piece } from '@common/piece.enum';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class BoardFactoryServiceService {
+export class BoardFactoryService {
     static createEmptyBoard(): Board {
         return new Uint8Array(64);
     }
 
     static createStartingPosition(): Board {
-        const board = BoardFactoryServiceService.createEmptyBoard();
+        const board = BoardFactoryService.createEmptyBoard();
 
         const backRank: Piece[] = [
         Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen,
