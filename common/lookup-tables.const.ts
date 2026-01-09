@@ -2,6 +2,9 @@ export const EMPTY_MOVE = 255;
 export const WHITE = 0;
 export const BLACK = 1;
 
+//MAYBE DO ALL IN 1 ITERATION FOR THE MOMENT LEAVING SEPARATE AS IS EASIER
+
+//KNIGHTS
 const KNIGHT_DELTAS = [
     [-2,-1], [-2,1], [-1,-2], [-1,2],
     [1,-2], [1,2], [2,-1], [2,1]
@@ -28,8 +31,42 @@ for (let sq = 0; sq < 64; sq ++) {
 
 const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 const queenMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
-const rookMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array([255]));
 
+//ROOKS
+const ROOK_DELTAS = [
+  [ 1,  0],
+  [ 0,  1],
+  [-1,  0],
+  [ 0, -1],
+];
+
+const rookMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(18));
+
+for (let sq = 0; sq <64; sq++) {
+  const row = Math.floor(sq / 8);
+  const col = sq % 8;
+
+  const arr = rookMoves[sq];
+  let index = 0;
+  for (const [dr, dc] of ROOK_DELTAS) {
+    let r = row + dr;
+    let c = col + dc;
+
+    while (r >= 0 && r < 8 && c >= 0 && c < 8) {
+      arr[index++] = r * 8 + c;
+      r += dr;
+      c += dc;
+    }
+    arr[index++] = EMPTY_MOVE;
+  }
+
+  //The rest of the moves are invalid
+  while (index < arr.length) {
+    arr[index++] = EMPTY_MOVE;
+  }
+}
+
+//BISHOPS
 const BISHOP_DELTAS = [
   [ 1,  1],
   [ 1, -1],
@@ -64,6 +101,7 @@ for (let sq = 0; sq < 64; sq++) {
   }
 }
 
+//PAWNS
 //We have 2 cause depending on light square or dark pawn moves up or down
 const pawnMoves: Uint8Array[][] = [
   Array.from({ length: 64 }, () => new Uint8Array(2)),
