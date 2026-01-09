@@ -2,7 +2,11 @@ export const EMPTY_MOVE = 255;
 export const WHITE = 0;
 export const BLACK = 1;
 
-//MAYBE DO ALL IN 1 ITERATION FOR THE MOMENT LEAVING SEPARATE AS IS EASIER
+function fillEmpty(arr: Uint8Array, index: number) {
+  while (index < arr.length) {
+    arr[index++] = EMPTY_MOVE;
+  }
+}
 
 //KNIGHTS
 const KNIGHT_DELTAS = [
@@ -12,21 +16,21 @@ const KNIGHT_DELTAS = [
 
 const knightMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(8));
 
-for (let sq = 0; sq < 64; sq ++) {
-    const row = Math.floor(sq / 8);
-    const col = sq % 8;
-    const moves = [];
-    for (const [dr, dc] of KNIGHT_DELTAS) {
-        const r = row + dr;
-        const c = col + dc;
-        if (r >= 0 && r < 8 && c >= 0 && c < 8) moves.push(r * 8 + c)
+function getKnightMoves(sq: number, row: number, col: number) {
+  const arr = knightMoves[sq];
+  let index = 0;
+
+  for (const [dr, dc] of KNIGHT_DELTAS) {
+    const r = row + dr;
+    const c = col + dc;
+
+    if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+      arr[index++] = r * 8 + c;
     }
+  }
 
-    const arr = knightMoves[sq];
-    for (let i = 0; i < moves.length; i++) arr[i] = moves[i];
-
-    //The rest of the moves are invalid
-    for (let i = moves.length; i < arr.length; i++) arr[i] = EMPTY_MOVE;
+  //The rest of the moves are invalid
+  fillEmpty(arr, index);
 }
 
 //KING
@@ -38,10 +42,7 @@ const KING_DELTAS = [
 
 const kingMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(8));
 
-for (let sq = 0; sq < 64; sq++) {
-  const row = Math.floor(sq / 8);
-  const col = sq % 8;
-
+function getKingMoves(sq: number, row: number, col: number) {
   const arr = kingMoves[sq];
   let index = 0;
 
@@ -55,9 +56,7 @@ for (let sq = 0; sq < 64; sq++) {
   }
 
   //The rest of the moves are invalid
-  while (index < arr.length) {
-    arr[index++] = EMPTY_MOVE;
-  }
+  fillEmpty(arr, index);
 }
 
 //ROOKS
@@ -70,10 +69,7 @@ const ROOK_DELTAS = [
 
 const rookMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(18));
 
-for (let sq = 0; sq <64; sq++) {
-  const row = Math.floor(sq / 8);
-  const col = sq % 8;
-
+function getRookMoves(sq: number, row: number, col: number) {
   const arr = rookMoves[sq];
   let index = 0;
   for (const [dr, dc] of ROOK_DELTAS) {
@@ -89,9 +85,7 @@ for (let sq = 0; sq <64; sq++) {
   }
 
   //The rest of the moves are invalid
-  while (index < arr.length) {
-    arr[index++] = EMPTY_MOVE;
-  }
+  fillEmpty(arr, index);
 }
 
 //BISHOPS
@@ -104,10 +98,7 @@ const BISHOP_DELTAS = [
 
 const bishopMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(18));
 
-for (let sq = 0; sq < 64; sq++) {
-  const row = Math.floor(sq / 8);
-  const col = sq % 8;
-
+function getBishopMoves(sq: number, row: number, col: number) {
   const arr = bishopMoves[sq];
   let index = 0;
 
@@ -124,9 +115,7 @@ for (let sq = 0; sq < 64; sq++) {
   }
 
   //The rest of the moves are invalid
-  while (index < arr.length) {
-    arr[index++] = EMPTY_MOVE;
-  }
+  fillEmpty(arr, index);
 }
 
 //PAWNS
@@ -136,9 +125,7 @@ const pawnMoves: Uint8Array[][] = [
   Array.from({ length: 64 }, () => new Uint8Array(2)),
 ];
 
-for (let sq = 0; sq < 64; sq++) {
-  const row = Math.floor(sq / 8);
-
+function getPawnMoves(sq: number, row: number) {
   //White
   {
     const arr = pawnMoves[WHITE][sq];
@@ -149,7 +136,7 @@ for (let sq = 0; sq < 64; sq++) {
       if (row === 1) arr[i++] = sq + 16;
     }
 
-    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+    fillEmpty(arr, i);
   }
 
   //Black
@@ -162,7 +149,7 @@ for (let sq = 0; sq < 64; sq++) {
       if (row === 6) arr[i++] = sq - 16;
     }
 
-    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+    fillEmpty(arr, i);
   }
 }
 
@@ -171,10 +158,7 @@ const pawnCaptures: Uint8Array[][] = [
   Array.from({ length: 64 }, () => new Uint8Array(2)),
 ];
 
-for (let sq = 0; sq < 64; sq++) {
-  const row = Math.floor(sq / 8);
-  const col = sq % 8;
-
+function getPawnCaptures(sq: number, row: number, col: number) {
   //White
   {
     const arr = pawnCaptures[WHITE][sq];
@@ -183,7 +167,7 @@ for (let sq = 0; sq < 64; sq++) {
     if (row < 7 && col > 0) arr[i++] = sq + 7;
     if (row < 7 && col < 7) arr[i++] = sq + 9;
 
-    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+    fillEmpty(arr, i);
   }
 
   //Black
@@ -194,9 +178,22 @@ for (let sq = 0; sq < 64; sq++) {
     if (row > 0 && col > 0) arr[i++] = sq - 9;
     if (row > 0 && col < 7) arr[i++] = sq - 7;
 
-    while (i < arr.length) arr[i++] = EMPTY_MOVE;
+    fillEmpty(arr, i);
   }
 }
+
+for (let sq = 0; sq < 64; sq++) {
+  const row = Math.floor(sq / 8);
+  const col = sq % 8;
+
+  getKingMoves(sq, row, col);
+  getRookMoves(sq, row, col);
+  getBishopMoves(sq, row, col);
+  getPawnMoves(sq, row);
+  getPawnCaptures(sq, row, col);
+  getKnightMoves(sq, row, col);
+}
+
 
 const queenMoves: Uint8Array[] = Array.from(
   { length: 64 },
