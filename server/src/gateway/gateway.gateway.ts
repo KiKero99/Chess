@@ -7,7 +7,7 @@ import { Server, Socket } from 'socket.io';
 import { RoomFactoryService } from 'src/services/room-factory/room-factory.service';
 import { RoomManagerService } from 'src/services/room-manager/room-manager.service';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class GatewayGateway {
   @WebSocketServer() private readonly server: Server;
 
