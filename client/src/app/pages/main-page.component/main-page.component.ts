@@ -1,8 +1,8 @@
-import { Player } from '@common/player.interface';
+import { Player } from '@common/rooms/player.interface';
 import { Component, OnDestroy  } from '@angular/core';
 import { Router } from '@angular/router';
 import { SocketManagerService } from '@app/services/socket-manager/socket-manager.service';
-import { CREATE_GAME_MESSAGE, GAME_CREATED_MESSAGE } from '@common/socket-messages.consts';
+import { CREATE_GAME_MESSAGE, GAME_CREATED_MESSAGE } from '@common/socket/socket-messages.consts';
 import { RoomManagerService } from '@app/services/room-manager/room-manager.service';
 
 @Component({

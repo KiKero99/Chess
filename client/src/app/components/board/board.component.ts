@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { GameService } from '@app/services/game/game.service';
 import { ImageManagerService } from '@app/services/piece-image-manager/image-manager.service';
 import { AvailableMovesManagagerService } from '@app/services/availabe-moves-manager/available-moves-managager.service';
-import { Piece } from '@common/piece.enum';
+import { Piece } from '@common/game-architechture/piece.enum';
 
 @Component({
   selector: 'app-board',

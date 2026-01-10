@@ -1,7 +1,7 @@
-import { Player } from '@common/player.interface';
-import { Room } from '@common/room.interface';
-import { JoinRequest } from '@common/join-request.interface';
-import { CREATE_GAME_MESSAGE, GAME_CREATED_MESSAGE, JOIN_REQUEST_MESSAGE, ROOM_DOESNT_EXISTS_MESSAGE, GAME_STARTED_MESSAGE } from '@common/socket-messages.consts';
+import { Player } from '@common/rooms/player.interface';
+import { Room } from '@common/rooms/room.interface';
+import { JoinLeaveRequest } from '@common/socket/join-leave-request.interface';
+import { CREATE_GAME_MESSAGE, GAME_CREATED_MESSAGE, JOIN_REQUEST_MESSAGE, ROOM_DOESNT_EXISTS_MESSAGE, GAME_STARTED_MESSAGE, LEAVE_ROOM_MESSAGE, PLAYER_LEFT_MESSAGE } from '@common/socket/socket-messages.consts';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { RoomFactoryService } from 'src/services/room-factory/room-factory.service';
@@ -22,7 +22,7 @@ export class GatewayGateway {
   }
 
   @SubscribeMessage(JOIN_REQUEST_MESSAGE)
-  joinGame(client: Socket, request: JoinRequest) {
+  joinGame(client: Socket, request: JoinLeaveRequest) {
     const room: Room | undefined = this.roomManager.getRoom(request.roomId)
     if (!room) {
       client.emit(ROOM_DOESNT_EXISTS_MESSAGE);
@@ -33,5 +33,24 @@ export class GatewayGateway {
     client.join(room.id);
     this.server.to(room.id).emit(GAME_STARTED_MESSAGE, room.game);
     client.emit(GAME_CREATED_MESSAGE, room.id);
+  }
+
+  @SubscribeMessage(LEAVE_ROOM_MESSAGE)
+  leaveRoom(client: Socket, request: JoinLeaveRequest) {
+    const room: Room | undefined = this.roomManager.getRoom(request.roomId)
+    if (!room) {
+      client.emit(ROOM_DOESNT_EXISTS_MESSAGE);
+      return;
+    }
+
+    if (!room.players.some((player) => {return player.id === request.player.id})) {
+      throw new Error("The player is not in the room");
+    }
+
+    this.roomManager.deleteRoom(request.roomId);
+    this.server.to(request.roomId).emit(PLAYER_LEFT_MESSAGE);
+    client.leave(request.roomId);
+    
+    //TODO delete all clients from room
   }
 }

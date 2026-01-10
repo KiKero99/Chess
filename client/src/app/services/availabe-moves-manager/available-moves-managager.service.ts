@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Piece } from '@common/piece.enum';
-import { kingMoves, knightMoves, queenMoves, rookMoves, pawnMoves, bishopMoves, pawnCaptures,EMPTY_MOVE } from '@common/lookup-tables.const';
+import { Piece } from '@common/game-architechture/piece.enum';
+import { kingMoves, knightMoves, queenMoves, rookMoves, pawnMoves, bishopMoves, pawnCaptures,EMPTY_MOVE } from '@common/game-architechture/lookup-tables.const';
 import { GameService } from '@app/services/game/game.service';
 
 @Injectable({

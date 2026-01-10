@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Board } from '@common/board.type';
-import { Piece } from '@common/piece.enum';
+import { Board } from '@common/game-architechture/board.type';
+import { Piece } from '@common/game-architechture/piece.enum';
 
 @Injectable({
   providedIn: 'root',

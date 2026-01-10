@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Room } from '@common/room.interface';
-import { Player } from '@common/player.interface';
-import { MAX_ROOM_CODE_SIZE } from '@common/game.consts';
+import { Room } from '@common/rooms/room.interface';
+import { Player } from '@common/rooms/player.interface';
+import { MAX_ROOM_CODE_SIZE } from '@common/rooms/game.consts';
 import { v4 as uuidv4 } from 'uuid';
 import { GameFactoryService } from '../game-factory/game-factory.service';
 

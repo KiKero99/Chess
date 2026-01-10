@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Piece } from '@common/piece.enum';
+import { Piece } from '@common/game-architechture/piece.enum';
 
 @Injectable({
   providedIn: 'root',

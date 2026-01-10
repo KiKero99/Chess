@@ -3,3 +3,5 @@ export const GAME_CREATED_MESSAGE = "gameCreated";
 export const JOIN_REQUEST_MESSAGE = "joinRequest";
 export const ROOM_DOESNT_EXISTS_MESSAGE = "roomDoesntExists";
 export const GAME_STARTED_MESSAGE = "gameStarted";
+export const LEAVE_ROOM_MESSAGE = "leaveRoom";
+export const PLAYER_LEFT_MESSAGE = "playerLeft";

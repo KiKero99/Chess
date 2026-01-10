@@ -1,5 +1,5 @@
-import { Board } from '@common/board.type';
-import { Piece } from '@common/piece.enum';
+import { Board } from '@common/game-architechture/board.type';
+import { Piece } from '@common/game-architechture/piece.enum';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
