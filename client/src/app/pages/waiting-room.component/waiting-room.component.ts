@@ -25,7 +25,7 @@ export class WaitingRoomComponent {
   }
 
   goBack() {
-    this.socketManager.send(LEAVE_ROOM_MESSAGE, {roomId: this.roomCode, player: {name: "Pelusy", id: ""} as Player} as JoinLeaveRequest);
+    this.socketManager.send(LEAVE_ROOM_MESSAGE, {roomId: this.roomCode, player: {name: "pelusy", id: ""} as Player} as JoinLeaveRequest);
     this.router.navigate(['/']);
   }
 }

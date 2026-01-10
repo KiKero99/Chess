@@ -37,13 +37,13 @@ export class GatewayGateway {
 
   @SubscribeMessage(LEAVE_ROOM_MESSAGE)
   leaveRoom(client: Socket, request: JoinLeaveRequest) {
-    const room: Room | undefined = this.roomManager.getRoom(request.roomId)
+    const room: Room | undefined = this.roomManager.getRoom(request.roomId);
     if (!room) {
       client.emit(ROOM_DOESNT_EXISTS_MESSAGE);
       return;
     }
 
-    if (!room.players.some((player) => {return player.id === request.player.id})) {
+    if (!room.players.some((player) => {return player.name === request.player.name})) {
       throw new Error("The player is not in the room");
     }
 
