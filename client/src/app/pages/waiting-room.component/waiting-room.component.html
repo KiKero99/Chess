@@ -1,0 +1,18 @@
+<div class="page">
+  <div class="card">
+    <h1 class="title">Waiting Room</h1>
+
+    <p class="subtitle">Share this code with your opponent</p>
+
+    <div class="code-box">
+      <span class="code">{{ roomCode }}</span>
+      <button class="copy-btn" (click)="copyCode()">Copy</button>
+    </div>
+
+    <p class="hint">Waiting for another player to join…</p>
+
+    <button class="back-btn" (click)="goBack()">
+      Back to main menu
+    </button>
+  </div>
+</div>
