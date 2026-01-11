@@ -32,7 +32,6 @@ export class GatewayGateway {
     this.roomManager.addPlayerToRoom(request.roomId, request.player);
     client.join(room.id);
     this.server.to(room.id).emit(GAME_STARTED_MESSAGE, room.game);
-    client.emit(GAME_CREATED_MESSAGE, room.id);
   }
 
   @SubscribeMessage(LEAVE_ROOM_MESSAGE)

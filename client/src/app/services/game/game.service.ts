@@ -1,41 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Board } from '@common/game-architechture/board.type';
 import { Piece } from '@common/game-architechture/piece.enum';
+import { Game } from '@common/rooms/game.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
-  board: Board;
+  private game: Game | null = null;
 
-  constructor() {
-    this.board = GameService.createEmptyBoard();
-    this.resetToStartingPosition();
+  get board(): Board {
+    if (!this.game) throw new Error("There is no game initialized");
+    return this.game.board;
   }
 
-  static createEmptyBoard(): Board {
-    return new Uint8Array(64);
+  setGame(game: Game) {
+    game.board = new Uint8Array(game.board as any);
+    this.game = game;
   }
 
-  static createStartingPosition(): Board {
-    const board = GameService.createEmptyBoard();
-
-    const backRank: Piece[] = [
-      Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen,
-      Piece.King, Piece.Bishop, Piece.Knight, Piece.Rook
-    ];
-
-    for (let file = 0; file < 8; file++) {
-      board[file] = backRank[file] | Piece.White;
-      board[8 + file] = Piece.Pawn | Piece.White;
-    }
-
-    for (let file = 0; file < 8; file++) {
-      board[48 + file] = Piece.Pawn | Piece.Black;
-      board[56 + file] = backRank[file] | Piece.Black;
-    }
-
-    return board;
+  isInitialized(): boolean {
+    return !!this.game;
   }
 
   static getPieceType(square: number): Piece {
@@ -51,19 +36,19 @@ export class GameService {
   }
 
   canMove(from: number, to: number): boolean {
-    const piece = this.board[from];
-    const target = this.board[to];
+    const piece = this.game?.board[from];
+    const target = this.game?.board[to];
 
     if (piece === Piece.Empty) return false;
 
-    if ( GameService.getPieceType(piece) === Piece.Pawn) {
-      return this.canPawnMove(from, to, piece, target);
+    if ( GameService.getPieceType(piece!) === Piece.Pawn) {
+      return this.canPawnMove(from, to, piece!, target!);
     }
 
     return target 
     
     
-    === Piece.Empty || !GameService.areSameColor(piece, target);
+    === Piece.Empty || !GameService.areSameColor(piece!, target!);
   }
 
   canPawnMove(from: number, to: number, piece: Piece, target: Piece) {
@@ -93,7 +78,7 @@ export class GameService {
           rowDiff === 2 * direction &&
           fromRow === startRow &&
           target === Piece.Empty &&
-          this.board[intermediateSquare] === Piece.Empty
+          this.game?.board[intermediateSquare] === Piece.Empty
       ) {
           return true;
       }
@@ -112,16 +97,20 @@ export class GameService {
     return false;
   }
 
-  resetToStartingPosition(): void {
-    this.board = GameService.createStartingPosition();
+  clean()  {
+    this.game = null;
   }
 
-  resetToEmpty(): void {
-    this.board = GameService.createEmptyBoard();
-  }
+  // resetToStartingPosition(): void {
+  //   this.game!.board = GameService.createStartingPosition();
+  // }
+
+  // resetToEmpty(): void {
+  //   this.game!.board = GameService.createEmptyBoard();
+  // }
 
   movePiece(position: number, target: number) {
-    this.board[target] = this.board[position];
-    this.board[position] = Piece.Empty;
+    this.game!.board[target] = this.board[position];
+    this.game!.board[position] = Piece.Empty;
   }
 }

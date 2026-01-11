@@ -8,6 +8,8 @@
   aspect-ratio: 1 / 1;
 
   border: 2px solid #333;
+  border-radius: 16px; 
+  background-color: #333;
   overflow: hidden;
 }
 
@@ -55,4 +57,13 @@
 
 .square.highlighted {
   background-color: rgba(255, 215, 0, 0.5);
+}
+
+.board-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+
+  padding: 24px;
 }

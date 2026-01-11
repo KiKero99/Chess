@@ -8,8 +8,18 @@
     <button class="primary-btn" (click)="createRoom()">
       Create Room
     </button>
-    <button class="primary-btn" (click)="createRoom()">
-      Join Room
-    </button>
+    <div class="join-section">
+      <input
+        class="room-input"
+        type="text"
+        placeholder="Enter room code"
+        [(ngModel)]="roomCode"
+        maxlength="20"
+      />
+
+      <button (keydown.enter)="joinRoom()" class="secondary-btn" (click)="joinRoom()">
+        Join Room
+      </button>
+    </div>
   </div>
 </div>

@@ -11,7 +11,8 @@ import { Piece } from '@common/game-architechture/piece.enum';
   styleUrl: './board.component.scss',
 })
 export class BoardComponent {
-  constructor(public gameService: GameService,  private readonly images: ImageManagerService, private readonly availableMovesManager: AvailableMovesManagagerService) {}
+  constructor(public gameService: GameService,  private readonly images: ImageManagerService, private readonly availableMovesManager: AvailableMovesManagagerService) {
+  }
 
   isLightSquare(index: number): boolean {
     const row = Math.floor(index / 8);
