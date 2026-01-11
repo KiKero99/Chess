@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoomManagerService } from '@app/services/room-manager/room-manager.service';
 import { SocketManagerService } from '@app/services/socket-manager/socket-manager.service';
 import { GAME_STARTED_MESSAGE, LEAVE_ROOM_MESSAGE } from '@common/socket/socket-messages.consts';
 import { JoinLeaveRequest } from '@common/socket/join-leave-request.interface';
 import { Player } from '@common/rooms/player.interface';
-import { Game } from '@common/rooms/game.interface';
 import { GameService } from '@app/services/game/game.service';
+import { Room } from '@common/rooms/room.interface';
+import { PlayerService } from '@app/services/player/player.service';
 
 @Component({
   selector: 'app-waiting-room.component',
@@ -15,10 +16,12 @@ import { GameService } from '@app/services/game/game.service';
   styleUrl: './waiting-room.component.scss',
 })
 export class WaitingRoomComponent {
+  private readonly playerService: PlayerService = inject(PlayerService);
 
   constructor(private readonly router: Router, private readonly roomManager: RoomManagerService, private readonly socketManager: SocketManagerService, private readonly gameService: GameService) {
-    this.socketManager.on(GAME_STARTED_MESSAGE, (game: Game) => {
-      this.gameService.setGame(game);
+    this.socketManager.on(GAME_STARTED_MESSAGE, (room: Room) => {
+      this.gameService.setGame(room.game);
+      this.playerService.setInfo(room.players)
       this.router.navigate(['/game']);
     });
   }

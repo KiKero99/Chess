@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { PlayerService } from './services/player/player.service';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('client');
+
+  // Initialize before hand
+  private readonly playerService: PlayerService = inject(PlayerService);
 }

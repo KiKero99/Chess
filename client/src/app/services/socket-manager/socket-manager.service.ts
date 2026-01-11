@@ -9,6 +9,10 @@ import { environment } from '@app/../environments/environment';
 export class SocketManagerService {
   private socket?: Socket;
 
+  get id(): string | undefined{
+    return this.socket?.id;
+  }
+
   isSocketAlive() {
     return this.socket?.connected;
   }

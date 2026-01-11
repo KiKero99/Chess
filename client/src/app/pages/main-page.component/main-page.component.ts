@@ -6,8 +6,9 @@ import { CREATE_GAME_MESSAGE, GAME_CREATED_MESSAGE, GAME_STARTED_MESSAGE, JOIN_R
 import { RoomManagerService } from '@app/services/room-manager/room-manager.service';
 import { FormsModule } from '@angular/forms';
 import { JoinLeaveRequest } from '@common/socket/join-leave-request.interface';
-import { Game } from '@common/rooms/game.interface';
+import { Room } from '@common/rooms/room.interface';
 import { GameService } from '@app/services/game/game.service';
+import { PlayerService } from '@app/services/player/player.service';
 
 @Component({
   selector: 'app-main-page',
@@ -20,6 +21,7 @@ export class MainPageComponent implements OnDestroy  {
   private readonly gameService: GameService = inject(GameService);
   private readonly router: Router = inject(Router);
   private readonly roomManager: RoomManagerService = inject(RoomManagerService);
+  private readonly playerService: PlayerService = inject(PlayerService);
 
   constructor(private readonly socketManager: SocketManagerService) {
     this.socketManager.connect();
@@ -29,8 +31,9 @@ export class MainPageComponent implements OnDestroy  {
       this.router.navigate(['/lobby']);
     });
 
-    this.socketManager.on(GAME_STARTED_MESSAGE, (game: Game) => {
-      this.gameService.setGame(game);
+    this.socketManager.on(GAME_STARTED_MESSAGE, (room: Room) => {
+      this.gameService.setGame(room.game);
+      this.playerService.setInfo(room.players)
       this.router.navigate(['/game']);
     });
   }
@@ -45,7 +48,7 @@ export class MainPageComponent implements OnDestroy  {
   }
 
   createRoom() {
-    this.socketManager.send(CREATE_GAME_MESSAGE, {name: "pelusy"} as Player)
+    this.socketManager.send(CREATE_GAME_MESSAGE, { name: "pelusy" } as Player)
   }
 
   joinRoom() {
@@ -55,6 +58,6 @@ export class MainPageComponent implements OnDestroy  {
       return;
     }
     
-    this.socketManager.send(JOIN_REQUEST_MESSAGE, { roomId: this.roomCode, player: {name: 'pelusy'} as Player } as JoinLeaveRequest);
+    this.socketManager.send(JOIN_REQUEST_MESSAGE, { roomId: this.roomCode, player: { name: 'pelusy' } as Player } as JoinLeaveRequest);
   }
 }

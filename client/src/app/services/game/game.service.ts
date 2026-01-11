@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Board } from '@common/game-architechture/board.type';
+import { Color } from '@common/game-architechture/color.enum';
 import { Piece } from '@common/game-architechture/piece.enum';
 import { Game } from '@common/rooms/game.interface';
 
@@ -14,6 +15,10 @@ export class GameService {
     return this.game.board;
   }
 
+  get turn(): Color {
+    return this.game?.turn!;
+  }
+
   setGame(game: Game) {
     game.board = new Uint8Array(game.board as any);
     this.game = game;
@@ -23,7 +28,7 @@ export class GameService {
     return !!this.game;
   }
 
-  static getPieceType(square: number): Piece {
+  static getPieceType(square: number) {
     return square & 0b111;
   }
 
