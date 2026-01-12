@@ -1,40 +1,59 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Board } from '@common/game-architechture/board.type';
 import { Color } from '@common/game-architechture/color.enum';
-import { Piece } from '@common/game-architechture/piece.enum';
-import { canMove } from '@common/game-architechture/movement-utils.functions';
+import { canMove, encodeMove } from '@common/game-architechture/movement-utils.functions';
 import { Game } from '@common/rooms/game.interface';
+import { MoveRequest } from '@common/rooms/move-request.interface';
+import { SocketManagerService } from '../socket-manager/socket-manager.service';
+import { MAKE_MOVE_MESSAGE, MOVE_MADE_MESSAGE } from '@common/socket/socket-messages.consts';
+import { RoomManagerService } from '../room-manager/room-manager.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
-  private game: Game | null = null;
+  private readonly _game = signal<Game | null>(null);
+  private readonly socketManager: SocketManagerService = inject(SocketManagerService);
+  private readonly roomManager: RoomManagerService = inject(RoomManagerService);
 
   get board(): Board {
-    if (!this.game) throw new Error("There is no game initialized");
-    return this.game.board;
+    const g = this._game();
+    if (!g) throw new Error('Game not initialized');
+    return g.board;
   }
 
   get turn(): Color {
-    return this.game?.turn!;
+    return this._game()!.turn;
   }
 
+  listenToGameEvents() {
+    this.socketManager.connect();
+    this.socketManager.on(MOVE_MADE_MESSAGE, (game: Game) => {
+      this.setGame(game);
+    })
+  }
+
+
   setGame(game: Game) {
-    game.board = new Uint8Array(game.board as any);
-    this.game = game;
+    game.board = new Uint8Array(game.board);
+    this._game.set(game); 
   }
 
   isInitialized(): boolean {
-    return !!this.game;
+    return !!this._game();
   }
 
   canMove(from: number, to: number): boolean {
     return canMove(from, to, this.board);
   }
 
+  moveRequest(from: number, to: number) {
+    this.socketManager.send(MAKE_MOVE_MESSAGE, { roomId: this.roomManager.id, move: encodeMove(from, to) } as MoveRequest)
+  }
+
   clean()  {
-    this.game = null;
+    this._game.set(null);
+    this.socketManager.off(MOVE_MADE_MESSAGE);
   }
 
   // resetToStartingPosition(): void {
@@ -44,9 +63,4 @@ export class GameService {
   // resetToEmpty(): void {
   //   this.game!.board = GameService.createEmptyBoard();
   // }
-
-  movePiece(position: number, target: number) {
-    this.game!.board[target] = this.board[position];
-    this.game!.board[position] = Piece.Empty;
-  }
 }

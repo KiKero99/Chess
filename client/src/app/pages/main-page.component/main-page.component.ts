@@ -33,7 +33,8 @@ export class MainPageComponent implements OnDestroy  {
 
     this.socketManager.on(GAME_STARTED_MESSAGE, (room: Room) => {
       this.gameService.setGame(room.game);
-      this.playerService.setInfo(room.players)
+      this.playerService.setInfo(room.players);
+      this.roomManager.setRoom(room.id);
       this.router.navigate(['/game']);
     });
   }

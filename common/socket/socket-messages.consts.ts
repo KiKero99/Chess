@@ -6,3 +6,5 @@ export const GAME_STARTED_MESSAGE = "gameStarted";
 export const LEAVE_ROOM_MESSAGE = "leaveRoom";
 export const PLAYER_LEFT_MESSAGE = "playerLeft";
 export const PLAYER_INFO_MESSAGE = "playerInfo";
+export const MAKE_MOVE_MESSAGE = "makeMove";
+export const MOVE_MADE_MESSAGE = "moveMade";

@@ -21,7 +21,8 @@ export class WaitingRoomComponent {
   constructor(private readonly router: Router, private readonly roomManager: RoomManagerService, private readonly socketManager: SocketManagerService, private readonly gameService: GameService) {
     this.socketManager.on(GAME_STARTED_MESSAGE, (room: Room) => {
       this.gameService.setGame(room.game);
-      this.playerService.setInfo(room.players)
+      this.playerService.setInfo(room.players);
+       this.roomManager.setRoom(room.id);
       this.router.navigate(['/game']);
     });
   }

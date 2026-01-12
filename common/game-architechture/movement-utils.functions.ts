@@ -126,3 +126,17 @@ export function canMove(from: number, to: number, board: Board): boolean {
 
     return target === Piece.Empty || !areSameColor(piece!, target!);
 }
+
+export type Move = number & { readonly __moveBrand: unique symbol };
+
+export function encodeMove(from: number, to: number): Move {
+  return (from | (to << 6)) as  Move;
+}
+
+export function moveFrom(m: Move): number {
+  return m & 63;
+}
+
+export function moveTo(m: Move): number {
+  return (m >> 6) & 63;
+}

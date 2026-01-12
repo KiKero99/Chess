@@ -4,7 +4,7 @@ import { ImageManagerService } from '@app/services/piece-image-manager/image-man
 import { AvailableMovesManagagerService } from '@app/services/availabe-moves-manager/available-moves-managager.service';
 import { Piece } from '@common/game-architechture/piece.enum';
 import { PlayerService } from '@app/services/player/player.service';
-import { getPieceColor } from '@common/game-architechture/movement-utils.functions';
+import { getPieceColor, getPieceType } from '@common/game-architechture/movement-utils.functions';
 
 @Component({
   selector: 'app-board',
@@ -34,8 +34,12 @@ export class BoardComponent {
 
   onClickSquare(square: number, index: number){
     if (this.availableMovesManager.isAPieceSelected && this.isHighlighted(index)) {
-      this.gameService.movePiece(this.availableMovesManager.actualPos, index);
-      this.availableMovesManager.onClick(this.gameService.board[index] as Piece, index);
+      this.gameService.moveRequest(this.availableMovesManager.actualPos, index);
+      this.availableMovesManager.clean();
+      return;
+    }
+    if(getPieceType(square) === Piece.Empty) {
+      this.availableMovesManager.clean();
       return;
     }
     if (this.playerService.color !== getPieceColor(square)) return;

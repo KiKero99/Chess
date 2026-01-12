@@ -32,4 +32,9 @@ export class AvailableMovesManagagerService {
     this.selectedPiece = getPieceType(piece);
     this.selectedPos = pos;
   }
+
+  clean() {
+    this.selectedPiece = Piece.Empty;
+    this.selectedPos = 0;
+  }
 }
