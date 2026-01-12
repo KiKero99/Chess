@@ -1,3 +1,5 @@
+import { Piece } from "./piece.enum";
+
 export const EMPTY_MOVE = 255;
 export const WHITE = 0;
 export const BLACK = 1;
@@ -207,4 +209,27 @@ const queenMoves: Uint8Array[] = Array.from(
   }
 );
 
-export { knightMoves, queenMoves, rookMoves, pawnMoves, pawnCaptures, bishopMoves, kingMoves };
+export interface MoveLookupTables {
+  jumpSliding: Map<Piece, Uint8Array[]>;
+  pawn: {
+    push: Uint8Array[][];
+    capture: Uint8Array[][];
+  };
+}
+
+const lookupTables: MoveLookupTables = {
+  jumpSliding: new Map<Piece, Uint8Array[]>(),
+  pawn: {
+    push: pawnMoves,
+    capture: pawnCaptures,
+  }
+}
+
+lookupTables.jumpSliding.set(Piece.King, kingMoves);
+lookupTables.jumpSliding.set(Piece.Knight, knightMoves);
+lookupTables.jumpSliding.set(Piece.Queen, queenMoves);
+lookupTables.jumpSliding.set(Piece.Rook, rookMoves);
+lookupTables.jumpSliding.set(Piece.Bishop, bishopMoves);
+
+export { lookupTables };
+

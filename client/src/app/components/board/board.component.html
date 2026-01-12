@@ -7,7 +7,7 @@
       class="square"
       [class.light]="isLightSquare(i)"
       [class.dark]="!isLightSquare(i)"
-      [class.highlighted]="isHighlighted(square, i)"
+      [class.highlighted]="isHighlighted(i)"
     >
     @if (square !== 0) {
       <img [src]="getPieceImage(square)" alt="piece" />
