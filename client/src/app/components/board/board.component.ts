@@ -1,14 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { GameService } from '@app/services/game/game.service';
+import { NoSelectDirective } from '@app/directives/no-select/no-select.directive';
 import { ImageManagerService } from '@app/services/piece-image-manager/image-manager.service';
 import { AvailableMovesManagagerService } from '@app/services/availabe-moves-manager/available-moves-managager.service';
 import { Piece } from '@common/game-architechture/piece.enum';
 import { PlayerService } from '@app/services/player/player.service';
 import { getPieceColor, getPieceType } from '@common/game-architechture/movement-utils.functions';
+import { CdkDrag, CdkDropList, CdkDragDrop, CdkDropListGroup, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-board',
-  imports: [],
+  imports: [CdkDrag, CdkDropList, NoSelectDirective, CdkDropListGroup, CdkDragPlaceholder],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss',
 })
@@ -32,6 +35,10 @@ export class BoardComponent {
     return this.images.getImage(square);
   }
 
+  isItMyTurn(square: number)  {
+    return this.playerService.color == getPieceColor(square) && this.gameService.turn == this.playerService.color
+  }
+
   onClickSquare(square: number, index: number){
     if (this.availableMovesManager.isAPieceSelected && this.isHighlighted(index)) {
       this.gameService.moveRequest(this.availableMovesManager.actualPos, index);
@@ -44,5 +51,23 @@ export class BoardComponent {
     }
     if (this.playerService.color !== getPieceColor(square)) return;
     this.availableMovesManager.onClick(square as Piece, index);
+  }
+
+  onDragStart(square: number, index: number) {
+    if (this.playerService.color !== getPieceColor(square)) return;
+
+    this.availableMovesManager.onClick(square as Piece, index);
+  }
+
+  onDrop(event: CdkDragDrop<number>) {
+    const targetIndex = event.container.data;
+    if (this.isHighlighted(targetIndex)) {
+      this.gameService.moveRequest(
+        this.availableMovesManager.actualPos,
+        targetIndex
+      );
+    }
+
+    this.availableMovesManager.clean();
   }
 }
