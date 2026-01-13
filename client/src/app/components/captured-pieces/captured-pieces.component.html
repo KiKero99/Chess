@@ -1,0 +1,8 @@
+<div class="zone">
+    @for (piece of captured; track $index; let i = $index) {
+        <img
+            [src]="getPieceImage(piece)"
+            alt="piece" 
+        />
+    }
+</div>

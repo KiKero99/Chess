@@ -35,7 +35,7 @@ export class GameManagerService {
         const available: Uint8Array = availableMoves(getPieceType(room.game.board[from]), from, lookupTables, room.game.board);
         if (!(available.includes(to) && canMove(from, to, room.game.board))) throw new Error("Move Not Valid");
 
-        this.move(room, from, to);
+        this.move(room, from, to, player);
         this.changeTurn(room);
 
         return room;
@@ -49,7 +49,9 @@ export class GameManagerService {
         room.game.turn ^= 1;
     }
 
-    move(room: Room, from: number, to: number) {
+    move(room: Room, from: number, to: number, player: Player) {
+        const targetPiece = room.game.board[to];
+        if (targetPiece !== Piece.Empty) player.captured?.push(targetPiece);
         const movingPiece = room.game.board[from];
         if (getPieceType(movingPiece) === Piece.King) room.game.kingPos[getPieceColor(movingPiece)] = to;
         room.game.board[to] = movingPiece;

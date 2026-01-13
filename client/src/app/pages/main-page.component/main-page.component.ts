@@ -40,7 +40,8 @@ export class MainPageComponent implements OnDestroy  {
   }
 
   ngOnDestroy() {
-    this.socketManager.off(CREATE_GAME_MESSAGE)
+    this.socketManager.off(CREATE_GAME_MESSAGE);
+    this.socketManager.off(GAME_STARTED_MESSAGE);
   }
 
   @HostListener('window:keydown.enter')

@@ -10,6 +10,8 @@ import { RoomManagerService } from '../room-manager/room-manager.service';
 import { SoundManagerService } from '../sound-manager/sound-manager.service';
 import { CAPTURE_SOUND, MOVE_SOUND } from '@app/constants/sound.consts';
 import { Piece } from '@common/game-architechture/piece.enum';
+import { Room } from '@common/rooms/room.interface';
+import { PlayerService } from '../player/player.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +22,7 @@ export class GameService {
   private readonly socketManager: SocketManagerService = inject(SocketManagerService);
   private readonly roomManager: RoomManagerService = inject(RoomManagerService);
   private readonly soundManager: SoundManagerService = inject(SoundManagerService);
+  private readonly playerManager: PlayerService = inject(PlayerService);
 
   get board(): Board {
     const g = this._game();
@@ -33,8 +36,9 @@ export class GameService {
 
   listenToGameEvents() {
     this.socketManager.connect();
-    this.socketManager.on(MOVE_MADE_MESSAGE, (game: Game) => {
-      this.setGame(game);
+    this.socketManager.on(MOVE_MADE_MESSAGE, (room: Room) => {
+      this.playerManager.setInfo(room.players);
+      this.setGame(room.game);
       if (this.isMoveCapture) {
         this.soundManager.playFx(CAPTURE_SOUND);
         return;

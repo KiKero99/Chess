@@ -8,3 +8,4 @@ export const PLAYER_LEFT_MESSAGE = "playerLeft";
 export const PLAYER_INFO_MESSAGE = "playerInfo";
 export const MAKE_MOVE_MESSAGE = "makeMove";
 export const MOVE_MADE_MESSAGE = "moveMade";
+export const CAPTURE_MADE_MESSAGE = "captureMade";

@@ -23,19 +23,6 @@
         [src]="getPieceImage(square)"
         alt="piece" 
       />
-      <div *cdkDragPlaceholder style="width:0; height:0; min-width:0; min-height:0;"></div>
-      <ng-template #piecePreview>
-        <img
-          [src]="getPieceImage(square)"
-          alt="dragging piece"
-          style="
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-            pointer-events: none;
-          "
-        />
-      </ng-template>
     }
     </div>
   }

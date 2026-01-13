@@ -1,7 +1,7 @@
 import { Player } from '@common/rooms/player.interface';
 import { Room } from '@common/rooms/room.interface';
 import { JoinLeaveRequest } from '@common/socket/join-leave-request.interface';
-import { CREATE_GAME_MESSAGE, GAME_CREATED_MESSAGE, JOIN_REQUEST_MESSAGE, ROOM_DOESNT_EXISTS_MESSAGE, GAME_STARTED_MESSAGE, LEAVE_ROOM_MESSAGE, PLAYER_LEFT_MESSAGE, MAKE_MOVE_MESSAGE, MOVE_MADE_MESSAGE } from '@common/socket/socket-messages.consts';
+import { CREATE_GAME_MESSAGE, GAME_CREATED_MESSAGE, JOIN_REQUEST_MESSAGE, ROOM_DOESNT_EXISTS_MESSAGE, GAME_STARTED_MESSAGE, LEAVE_ROOM_MESSAGE, PLAYER_LEFT_MESSAGE, MAKE_MOVE_MESSAGE, MOVE_MADE_MESSAGE, CAPTURE_MADE_MESSAGE } from '@common/socket/socket-messages.consts';
 import { MoveRequest } from '@common/rooms/move-request.interface';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -61,7 +61,7 @@ export class GatewayGateway {
   @SubscribeMessage(MAKE_MOVE_MESSAGE)
   makeMove(client: Socket, request: MoveRequest) {
     const updatedRoom: Room = this.gameManager.treatMoveRequest(request, client.id);
-    this.server.to(updatedRoom.id).emit(MOVE_MADE_MESSAGE, updatedRoom.game)
+    this.server.to(updatedRoom.id).emit(MOVE_MADE_MESSAGE, updatedRoom);
   }
 
   private notifyPlayers(players: Player[], event: string) {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoomManagerService } from '@app/services/room-manager/room-manager.service';
 import { SocketManagerService } from '@app/services/socket-manager/socket-manager.service';
@@ -15,7 +15,7 @@ import { PlayerService } from '@app/services/player/player.service';
   templateUrl: './waiting-room.component.html',
   styleUrl: './waiting-room.component.scss',
 })
-export class WaitingRoomComponent {
+export class WaitingRoomComponent implements OnDestroy {
   private readonly playerService: PlayerService = inject(PlayerService);
 
   constructor(private readonly router: Router, private readonly roomManager: RoomManagerService, private readonly socketManager: SocketManagerService, private readonly gameService: GameService) {
@@ -26,6 +26,10 @@ export class WaitingRoomComponent {
       this.router.navigate(['/game']);
     });
   }
+
+  ngOnDestroy() {
+      this.socketManager.off(GAME_STARTED_MESSAGE);
+    }
 
   get roomCode() {
     return this.roomManager.id;
