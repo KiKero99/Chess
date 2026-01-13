@@ -7,6 +7,8 @@ import { MoveRequest } from '@common/rooms/move-request.interface';
 import { SocketManagerService } from '../socket-manager/socket-manager.service';
 import { MAKE_MOVE_MESSAGE, MOVE_MADE_MESSAGE } from '@common/socket/socket-messages.consts';
 import { RoomManagerService } from '../room-manager/room-manager.service';
+import { SoundManagerService } from '../sound-manager/sound-manager.service';
+import { MOVE_SOUND } from '@app/constants/sound.consts';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +17,7 @@ export class GameService {
   private readonly _game = signal<Game | null>(null);
   private readonly socketManager: SocketManagerService = inject(SocketManagerService);
   private readonly roomManager: RoomManagerService = inject(RoomManagerService);
+  private readonly soundManager: SoundManagerService = inject(SoundManagerService);
 
   get board(): Board {
     const g = this._game();
@@ -30,6 +33,7 @@ export class GameService {
     this.socketManager.connect();
     this.socketManager.on(MOVE_MADE_MESSAGE, (game: Game) => {
       this.setGame(game);
+      this.soundManager.playFx(MOVE_SOUND);
     })
   }
 
