@@ -5,10 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { getRandomIndex } from 'src/utils/logic.functions';
 import { RoomManagerService } from '../room-manager/room-manager.service';
 import { Player } from '@common/rooms/player.interface';
-import { availableMoves, canMove, getPieceType, moveFrom, moveTo } from '@common/game-architechture/movement-utils.functions';
+import { availableMoves, canMove, getPieceColor, getPieceType, moveFrom, moveTo } from '@common/game-architechture/movement-utils.functions';
 import { lookupTables } from '@common/game-architechture/lookup-tables.const';
 import { Piece } from '@common/game-architechture/piece.enum';
-import { Game } from '@common/rooms/game.interface';
 
 @Injectable()
 export class GameManagerService {
@@ -51,7 +50,9 @@ export class GameManagerService {
     }
 
     move(room: Room, from: number, to: number) {
-        room.game.board[to] = room.game.board[from];
+        const movingPiece = room.game.board[from];
+        if (getPieceType(movingPiece) === Piece.King) room.game.kingPos[getPieceColor(movingPiece)] = to;
+        room.game.board[to] = movingPiece;
         room.game.board[from] = Piece.Empty;
     }
 }

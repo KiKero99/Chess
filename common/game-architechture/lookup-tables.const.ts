@@ -11,14 +11,14 @@ function fillEmpty(arr: Uint8Array, index: number) {
 }
 
 //KNIGHTS
-const KNIGHT_DELTAS = [
+export const KNIGHT_DELTAS = [
     [-2,-1], [-2,1], [-1,-2], [-1,2],
     [1,-2], [1,2], [2,-1], [2,1]
 ];
 
 const knightMoves: Uint8Array[] = Array.from({ length: 64 }, () => new Uint8Array(8));
 
-function getKnightMoves(sq: number, row: number, col: number) {
+export function getKnightMoves(sq: number, row: number, col: number) {
   const arr = knightMoves[sq];
   let index = 0;
 
@@ -36,7 +36,7 @@ function getKnightMoves(sq: number, row: number, col: number) {
 }
 
 //KING
-const KING_DELTAS = [
+export const KING_DELTAS = [
   [-1, -1], [-1,  0], [-1,  1],
   [ 0, -1],           [ 0,  1],
   [ 1, -1], [ 1,  0], [ 1,  1],
@@ -62,7 +62,7 @@ function getKingMoves(sq: number, row: number, col: number) {
 }
 
 //ROOKS
-const ROOK_DELTAS = [
+export const ROOK_DELTAS = [
   [ 1,  0],
   [ 0,  1],
   [-1,  0],
@@ -91,7 +91,7 @@ function getRookMoves(sq: number, row: number, col: number) {
 }
 
 //BISHOPS
-const BISHOP_DELTAS = [
+export const BISHOP_DELTAS = [
   [ 1,  1],
   [ 1, -1],
   [-1,  1],
