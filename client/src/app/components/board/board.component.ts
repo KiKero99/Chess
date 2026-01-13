@@ -41,8 +41,7 @@ export class BoardComponent {
 
   onClickSquare(square: number, index: number){
     if (this.availableMovesManager.isAPieceSelected && this.isHighlighted(index)) {
-      this.gameService.moveRequest(this.availableMovesManager.actualPos, index);
-      this.availableMovesManager.clean();
+      this.move(index);
       return;
     }
     if(getPieceType(square) === Piece.Empty) {
@@ -61,13 +60,15 @@ export class BoardComponent {
 
   onDrop(event: CdkDragDrop<number>) {
     const targetIndex = event.container.data;
-    if (this.isHighlighted(targetIndex)) {
-      this.gameService.moveRequest(
-        this.availableMovesManager.actualPos,
-        targetIndex
-      );
-    }
 
+    if (!this.isHighlighted(targetIndex)) return;
+    
+    this.move(targetIndex);
+  }
+
+  private move(index: number) {
+    this.gameService.setIsMoveCapture(index);
+    this.gameService.moveRequest(this.availableMovesManager.actualPos, index);
     this.availableMovesManager.clean();
   }
 }
