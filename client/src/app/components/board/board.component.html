@@ -1,4 +1,4 @@
-<div class="board" appNoSelect cdkDropListGroup>
+<div class="board" appNoSelect cdkDropListGroup [class.flipped]="isWhite()">
   @for (square of gameService.board; track $index; let i = $index) {
     <div
       appNoSelect

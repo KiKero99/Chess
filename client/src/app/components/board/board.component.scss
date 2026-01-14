@@ -11,6 +11,14 @@
   border-radius: 16px; 
   background-color: #333;
   overflow: hidden;
+
+  &.flipped {
+    transform: rotate(180deg);
+
+    .square {
+      transform: rotate(180deg);
+    }
+  }
 }
 
 .square.light {

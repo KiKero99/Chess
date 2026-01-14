@@ -7,7 +7,7 @@ import { Piece } from '@common/game-architechture/piece.enum';
 import { PlayerService } from '@app/services/player/player.service';
 import { getPieceColor, getPieceType } from '@common/game-architechture/movement-utils.functions';
 import { CdkDrag, CdkDropList, CdkDragDrop, CdkDropListGroup, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
-
+import { Color } from '@common/game-architechture/color.enum';
 
 @Component({
   selector: 'app-board',
@@ -18,6 +18,10 @@ import { CdkDrag, CdkDropList, CdkDragDrop, CdkDropListGroup, CdkDragPlaceholder
 export class BoardComponent {
   private readonly playerService: PlayerService = inject(PlayerService);
   constructor(public gameService: GameService,  private readonly images: ImageManagerService, private readonly availableMovesManager: AvailableMovesManagagerService) {
+  }
+
+  isWhite(): boolean {
+    return this.playerService.color === Color.WHITE;
   }
 
   isLightSquare(index: number): boolean {
